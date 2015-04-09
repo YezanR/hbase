@@ -2,7 +2,7 @@
 #include<stdio.h>
 %}
 
-%option noyywrap
+%option noyywrap deudeu u
 
 
 IDF			[a-zA-Z][a-zA-Z0-9]*
