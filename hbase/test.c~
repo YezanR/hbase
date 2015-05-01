@@ -1,0 +1,11 @@
+#include "stdio.h"
+#include "stdlib.h"
+
+
+int main()
+{
+	char* a = (char*)malloc(20*sizeof(char));
+	printf("%s", a);
+	printf("tizi");
+	return 0;
+}

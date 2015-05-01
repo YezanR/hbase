@@ -1,0 +1,25 @@
+CC=gcc
+
+CFLAGS=-Wall
+
+objects=hbase.o lex.yy.o tabsym.o 
+
+hbase: 	$(objects)
+	@$(CC) $(objects) -o hbase -lfl $(CFLAGS)
+	@echo done!
+
+hbase.o : hbase.c 
+	@$(CC) hbase.c -o hbase.o -c $(CFLAGS)
+
+lex.yy.o : 		lex.yy.c
+	@$(CC) lex.yy.c -o lex.yy.o -c $(CFLAGS) 
+
+tabsym.o : 		tabsym.c
+	@$(CC) tabsym.c -o tabsym.o -c $(CFLAGS) 
+
+ 
+
+clean:
+	@rm *.o hbase
+
+
