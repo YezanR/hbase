@@ -60,5 +60,14 @@ boolean _family_column_put();
 boolean _row_name();
 boolean _TS();
 boolean _col_aux();
+boolean _map_next();
+boolean _create_arg_aux();
+boolean _enable();
+boolean _disable();
+boolean _is_enabled();
+boolean _is_disabled();
+boolean _describe();
+boolean _alter_aux();
+boolean _map_alter();
 
 #endif

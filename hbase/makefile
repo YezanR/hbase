@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-Wall
 
-objects=hbase.o lex.yy.o tabsym.o 
+objects=hbase.o lex.yy.o tabsym.o database.o 
 
 hbase: 	$(objects)
 	@$(CC) $(objects) -o hbase -lfl $(CFLAGS)
@@ -11,12 +11,13 @@ hbase: 	$(objects)
 hbase.o : hbase.c 
 	@$(CC) hbase.c -o hbase.o -c $(CFLAGS)
 
-lex.yy.o : 		lex.yy.c
+lex.yy.o : lex.yy.c
 	@$(CC) lex.yy.c -o lex.yy.o -c $(CFLAGS) 
 
-tabsym.o : 		tabsym.c
+tabsym.o : tabsym.c
 	@$(CC) tabsym.c -o tabsym.o -c $(CFLAGS) 
-
+database.o :	database.c
+	@$(CC) database.c -o database.o -c $(CFLAGS) 
  
 
 clean:

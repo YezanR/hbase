@@ -1,4 +1,7 @@
 create 't1', 'fc1'
 create 't2', 'fc1:col'
+disable 't1'
+disable 't2'
 drop 't1'
 drop 't2'
+exit

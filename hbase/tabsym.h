@@ -9,9 +9,9 @@
 #define MAX_TABSYM_LENGTH				100
 #define MAX_ROW_NUMBER 					200
 #define MAX_STRING_VAL_LENGTH 			30
-#define MAX_COLUMN_NAME_LENGTH 			    20
-#define MAX_ROW_NAME_LENGTH 			    20
-
+#define MAX_COLUMN_NAME_LENGTH 			20
+#define MAX_ROW_NAME_LENGTH 			20
+#define MAX_TABLES_NUMBER				200
 
 #define DEFAULT_COLUMN_NAME 			"default_column"
 
@@ -40,6 +40,13 @@ ValType* 			create_dnumber_ValType(double dnum);
 ValType*            create_boolean_ValType(int num);
 Row*				create_row(char* name);
 void 				add_row_to_column(Column* column, Row* row);
+void 				delete_from_TABSYM(int table_index);
+void 				enable_table(int table_index);  // enable table in TABSYM by giving the table index 
+void 				disable_table(int table_index); // disable table in TABSYM by giving the table index
+boolean 			table_is_enabled(int table_index);
+
+
+
 // check if table_name exists in TABSYM and put it's corresponding index in table_index
 boolean 			table_name_exists_in_TABSYM(char*	table_name, int*  table_index);
 // add table to TABSYM  

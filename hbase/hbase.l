@@ -17,8 +17,10 @@ DNum		  [0-9]+"."[0-9]+
 "summary"		printf(" SUMMARY ");
 "detailed"		printf(" DETAILED") ;
 "version"					{ return VERSION; }
-"whoami"        			{ return WHOAMI; }
+"whoami"        				{ return WHOAMI; }
 "create"					{ return CREATE; }
+"'delete'"					{ return DELETE; }
+"alter"						{ return ALTER; }
 "describe" 					{ return DESCRIBE; }
 "disable" 					{ return DISABLE; }
 "disable_all" 				{ return DISABLE_ALL ;}

@@ -1,0 +1,4 @@
+create 't1', 'fc1'
+create 't2', 'fc1:col'
+drop 't1'
+drop 't2'

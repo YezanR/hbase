@@ -25,6 +25,7 @@ Table*  create_table(char* name)
 	tab->list_family_col = (FamilyColumn*)malloc(MAX_FAMILY_COLUMN_NUMBER*sizeof(FamilyColumn));
 	tab->index = 0;
 	tab->enabled = true;
+
 	return tab;
 }
 
@@ -387,7 +388,6 @@ void 	update_cmd_ValType_in_TABSYM(int index_of_table, Command* cmd)
 	{
 		int index_of_family_col;
 		int index_of_column;
-		int index_of_table;
 		int index_of_row;
 		char* tab_name = (char*) malloc ( (strlen(cmd->table->name)+1)*sizeof(char));
 		char* family_col_name =   (char*) malloc ( MAX_TABLE_NAME_LENGTH*sizeof(char));
@@ -401,6 +401,7 @@ void 	update_cmd_ValType_in_TABSYM(int index_of_table, Command* cmd)
 		strcpy(row_name, cmd->put_rname);
 		if ( family_column_exists_in_table(TABSYM[index_of_table], family_col_name, &index_of_family_col))
 		{
+			printf("index of family_col (%s) in table  (%s) is : %d\n",family_col_name, TABSYM[index_of_table]->name, index_of_family_col);
 			if ( column_exists_in_family_column(&TABSYM[index_of_table]->list_family_col[index_of_family_col], column_name, &index_of_column))
 			{
 				if ( row_exists_in_column(&TABSYM[index_of_table]->list_family_col[index_of_family_col].list_column[index_of_column], row_name, &index_of_row))
@@ -435,6 +436,56 @@ void 	update_cmd_ValType_in_TABSYM(int index_of_table, Command* cmd)
 	if ( DEBUG )
 	{
 		printf("Out of update_cmd_ValType_in_TABSYM()\n");
+	}
+}
+
+void delete_from_TABSYM(int table_index)
+{
+	TABSYM[table_index] = NULL;
+}
+
+void enable_table(int index_of_table)
+{
+	if( TABSYM[index_of_table])
+	{
+		TABSYM[index_of_table]->enabled = true;
+	}
+	else
+	{
+		if(DEBUG)
+		{
+			printf("FATAL Error : no table found in TABSYM with such index !\n");
+		}
+	}
+}
+
+void disable_table(int index_of_table)
+{
+	if( TABSYM[index_of_table])
+	{
+		TABSYM[index_of_table]->enabled = false;
+	}
+	else
+	{
+		if(DEBUG)
+		{
+			printf("FATAL Error : no table found in TABSYM with such index !\n");
+		}
+	}
+}
+
+boolean 	table_is_enabled(int table_index)
+{
+	if( TABSYM[table_index])
+	{
+		return TABSYM[table_index]->enabled;
+	}
+	else
+	{
+		if(DEBUG)
+		{
+			printf("FATAL Error : no table found in TABSYM with such index !\n");
+		}
 	}
 }
 

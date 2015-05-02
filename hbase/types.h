@@ -38,6 +38,7 @@ typedef struct
 	char* 	name;
 	Row* 	list_row;
 	int 	index;
+	char*   location; // relative url path to column
 }Column;
 
 typedef struct 
@@ -45,15 +46,16 @@ typedef struct
 	char* 	name;
 	Column* list_column;
 	int 	index; // last_index of list_column
+	char*   location; // relative url path to family column
 }FamilyColumn;
 
 typedef struct 
 {
-
 	char* 			name;	
 	FamilyColumn* 	list_family_col;
 	int   			index; // last_index of list_family_col
 	boolean			enabled;
+	char*			location; // relative url path to table
 }Table;
 
 typedef struct 
