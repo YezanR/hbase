@@ -73,7 +73,10 @@ void    	add_table_to_database(Table* table)
 			char*  schema_location = (char*) malloc( (strlen(table->location)+10)*sizeof(char));
 			strcpy(schema_location, table->location);
 			strcat(schema_location, "schema"); // "database/tab_name/schema"
+			// tmp string to store family column schema location
+			char*  fc_schema_location = (char*) malloc( (strlen(table->location)+MAX_FAMILY_COLUMN_NAME_LENGTH+10)*sizeof(char));
 			int i;
+			FILE* fc_schema_file; // file pointer to family column schema 
 			for (i=0; i<table->index;i++)
 			{
 				// allocation of family location because it was not initialised during creation of family column
@@ -89,6 +92,13 @@ void    	add_table_to_database(Table* table)
 				{
 					printf("FATAL ERROR: %s\n", strerror(errno));			
 				} 
+
+				// create family column schema file
+				strcpy(fc_schema_location, table->list_family_col[i].location);
+				strcat(fc_schema_location, "schema");
+				fc_schema_file= fopen(fc_schema_location, "w");
+				fprintf(fc_schema_file, "NAME : %s\nVERSIONS : %d", table->list_family_col[i].name, table->list_family_col[i].versions);
+				fclose(fc_schema_file);
 			}
 			// create schema file and write the schema in it
 			FILE* schema_file = fopen(schema_location, "w");
@@ -100,6 +110,7 @@ void    	add_table_to_database(Table* table)
 			fprintf(schema_file, "%s\nnb_rows : 0",  table->list_family_col[i].name);
 			fclose(schema_file);
 			free(schema_location);
+			free(fc_schema_location);
 		}
 		
 	}
