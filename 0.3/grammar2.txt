@@ -1,0 +1,40 @@
+
+	===================	 HBASE GRAMMAR  =================================
+
+	T := < CREATE, PUT, ALTER, SCAN, DROP, INUMBER, DNUMBER, TRUE, FALSE, IDF, OR, AND, NAME, FILTER, VERSIONS >
+
+	prog 					--> 		list_command  exit
+
+	list_command 			--> 		command list_command_aux | epsilon 		// epsilon = exit
+
+	list_command_aux 		-->         list_command | epsilon
+
+	command 				--> 		create EOC | put EOC   
+
+    put                     -->			PUT tab_name, row_name, family_column_qualifier, value TS
+
+    create					-->			CREATE tab_name, create_arg
+
+	value 					-->         'IDF' |  INUMBER  |  DNUMBER  |  TRUE  |  FALSE  
+
+	create_arg 				-->         family_column  |  list_map
+
+    row_name           	    -->			'IDF'
+
+	family_column			-->			'IDF' family_aux	// family_column is actually a list of family_columns 
+
+	family_aux				-->			,'IDF' family_column  |  epsilon
+
+	TS						-->			,IDF|epsilon
+
+	tab_name				-->			'IDF'
+
+	list_map		        -->	        {map} list_map_aux
+
+	list_map_aux			--> 		, list_map  |  epsilon
+
+	map 					--> 		key  =>  value map_aux
+
+	map_aux 				--> 		, map  |  epsilon
+
+	key						-->			NAME  |  FILTER  |  VERSIONS  |  METHOD ...
