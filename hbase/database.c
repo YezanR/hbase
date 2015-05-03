@@ -71,6 +71,9 @@ void    	add_table_to_database(Table* table)
 		}
 		else
 		{
+			char*  schema_location = (char*) malloc( (strlen(table->location)+10)*sizeof(char));
+			strcpy(schema_location, table->location);
+			strcat(schema_location, "schema"); // "database/tab_name/schema"
 			int i;
 			for (i=0; i<table->index;i++)
 			{
@@ -88,7 +91,18 @@ void    	add_table_to_database(Table* table)
 					printf("FATAL ERROR: %s\n", strerror(errno));			
 				} 
 			}
+			// create schema file and write the schema in it
+			FILE* schema_file = fopen(schema_location, "w");
+			fprintf(schema_file, "name : %s\nenabled : %d\nfamily_col : ", table->name, table->enabled);
+			for(i=0; i< table->index-1; i++)
+			{
+				fprintf(schema_file, "%s,", table->list_family_col[i].name);
+			}
+			fprintf(schema_file, "%s\n",  table->list_family_col[i].name);
+			fclose(schema_file);
+			free(schema_location);
 		}
+		
 	}
 }
 

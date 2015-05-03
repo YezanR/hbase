@@ -32,4 +32,6 @@ boolean					table_exists_in_database(char* table_name);
 char** 					list_tables_by_name_in_database(int* nb_tables); 
 
 
+
+
 #endif
