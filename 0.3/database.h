@@ -4,6 +4,7 @@
 #define 	DATABASE_DIRECTORY_NAME			"database/"
 #define     MAX_NUMBER_OF_FILES_IN_DIR		200	
 
+
 extern int DEBUG;
 
 /*
@@ -21,15 +22,24 @@ extern int DEBUG;
 
 
 #include "types.h"
+#include "tabsym.h"
 
 void 	 				add_table_to_database(Table* table);
 void 	 				delete_table_from_database(Table* table);
 // this function will update  table data in database when 'put' command is successfully executed 
 void 					update_table_in_database(Table* table, Command* cmd);
+// construct Table objet based on the schema file in database by passing the table name
+Table*					get_table_from_database(char* table_name);
+
+FamilyColumn*			get_family_column_from_database_by_location(char* fc_location);
+
+FamilyColumn*			get_family_column_from_database(char* table_location, char* fc_name);
 
 boolean					table_exists_in_database(char* table_name);
 // return a list of table names in databse directory and modifies nb_tables to the size of this list
 char** 					list_tables_by_name_in_database(int* nb_tables); 
+
+
 
 
 #endif

@@ -25,7 +25,6 @@ Table*  create_table(char* name)
 	tab->list_family_col = (FamilyColumn*)malloc(MAX_FAMILY_COLUMN_NUMBER*sizeof(FamilyColumn));
 	tab->index = 0;
 	tab->enabled = true;
-
 	return tab;
 }
 
@@ -37,6 +36,7 @@ FamilyColumn*  create_family_column(char* name)
 	fc->list_column = (Column*)malloc(MAX_COLUMN_NUMBER*sizeof(Column));
 	fc->list_column[0] = *create_column(DEFAULT_COLUMN_NAME);
 	fc->index = 1;
+	fc->versions = 1;
 	return fc;
 }
 
@@ -298,9 +298,8 @@ void      show_family_column(FamilyColumn* fc)
 {   
 	if ( fc )
 	{
-		printf("    <family_column>\n");
+		printf("    <family_column name='%s' versions = '%d' >\n", fc->name, fc->versions);
 		int i;
-		printf("	  %s\n", fc->name);
 		for ( i=0; i<fc->index; i++ )
 		{
 			show_column(&fc->list_column[i]);	
@@ -316,9 +315,8 @@ void      show_table(Table* table)
 {
 	if ( table )
 	{
-		printf("  <table>\n");
+		printf("  <table name='%s' enabled = %d>\n", table->name, table->enabled);
 		int i;
-		printf("	%s\n", table->name);
 		for ( i=0; i<table->index; i++ )
 		{
 			show_family_column(&table->list_family_col[i]);	

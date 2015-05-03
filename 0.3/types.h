@@ -47,6 +47,7 @@ typedef struct
 	Column* list_column;
 	int 	index; // last_index of list_column
 	char*   location; // relative url path to family column
+	int 	versions;
 }FamilyColumn;
 
 typedef struct 
@@ -56,6 +57,7 @@ typedef struct
 	int   			index; // last_index of list_family_col
 	boolean			enabled;
 	char*			location; // relative url path to table
+	int 			nb_rows;
 }Table;
 
 typedef struct 

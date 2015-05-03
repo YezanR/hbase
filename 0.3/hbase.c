@@ -1583,7 +1583,11 @@ int main(int argc, char const *argv[])
 			afficher_sm_erreurs();
 		}
 	}
-	list_tables_by_name_in_database(&nb_tab);
+	char tname[20];
+	strcpy(tname, "t1");
+	Table*	t = get_table_from_database(tname);
+	show_table(t);
+	//list_tables_by_name_in_database(&nb_tab);
 	return 0;
 }
 
