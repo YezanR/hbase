@@ -1034,16 +1034,46 @@ boolean _TS()
 boolean _describe()
 {
 	boolean result;
+	int i;
 	if(current_token == DESCRIBE)
 	{
 		current_token = _read_token();
+		cmd = create_command("describe", NULL);
 		if(_table_name())
 		{
+			char* table_location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char) );
+			if ( !table_exists_in_database(cmd->table->name , table_location))
+			{
+				creer_sm_erreur(yylineno+1, cmd->table->name, TABLE_DOESNT_EXIST);
+			}
+			else
+			{	
+				Table* t = get_table_from_database(cmd->table->name);
+				if(t)
+				{
+					if(t->enabled == true)
+					{
+						printf("Table %s is ENABLED\n",cmd->table->name);
+					}
+					else
+					{
+						printf("Table %s is DISABLED\n", cmd->table->name);
+					}
+					printf("%s\n",cmd->table->name );
+					printf("COLUMN FAMILIES DESCRIPTION\n");
+					for (i=0; i<t->index; i++)
+					{
+						printf("{ NAME => '%s', VERSIONS => '%d' }\n",t->list_family_col[i].name, t->list_family_col[i].versions );
+					}
+					printf("%d row(s)\n", t->nb_rows );
+				}
+
+			}			
 			result = true;
 		}
 		else
 		{
-			result = false;
+			result  =false;
 		}
 	}
 	else
