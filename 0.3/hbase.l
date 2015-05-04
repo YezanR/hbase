@@ -29,7 +29,7 @@ DNum		  [0-9]+"."[0-9]+
 "enable_all"				{ return ENABLE_ALL; }	
 "is_enabled"				{ return IS_ENABLED; }
 "is_disabled" 				{ return IS_DISABLED; }
-"list"						{ return LIST; }
+"list"						{ return _LIST; }
 "show_filters"				{ return SHOW_FILTERS;}
 "count"						{ return COUNT; }
 "get"						{ return GET; }
