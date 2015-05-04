@@ -29,20 +29,20 @@ typetoken _read_token()
 
 boolean _prog()
 {
-	boolean result;
 	if ( _list_command() )
 	{
 		current_token = _read_token();
 		if ( current_token == EXIT )
 		{
-			result = true;
+			return 1;
 		}
 	}
 	else
 	{
-		result = false;
+		current_token = _read_token();
+		_prog();
 	}
-
+	return 0;
 }
 
 // list_command --> command list_command_aux | epsilon   
@@ -56,7 +56,8 @@ boolean _list_command()
 	}
     if ( _command() )
 	{
-		
+		afficher_sm_erreurs();
+		reset_sm_erreurs();
 		current_token = _read_token();
 		if ( _list_command_aux() )
 		{
@@ -64,7 +65,6 @@ boolean _list_command()
 		}
 		else
 		{
-			
 			result = false;
 		}
 	}
@@ -240,42 +240,42 @@ boolean _command()
 boolean _create()
 {
 	boolean result;
+	boolean error = false;
 	if ( current_token == CREATE)
 	{
 		cmd = create_command("create", NULL);
 		current_token = _read_token();
 		if ( _table_name() )
 		{
+			// if table already exists then you can't create it !
+			if ( table_name_exists_in_TABSYM(cmd->table->name, &table_index))
+			{
+				creer_sm_erreur(yylineno+1, cmd->table->name, TABLE_ALREADY_EXIST);
+				error = true;
+				if (DEBUG)
+				{
+					printf("ERROR: table name '%s' already exists in TABSYM \n", cmd->table->name);
+				}
+			}
+			// if the create command is correct then add this new table to TABSYM/DATABASE
+			else if ( table_exists_in_database(cmd->table->name, NULL) )
+			{
+				creer_sm_erreur(yylineno+1, cmd->table->name, TABLE_ALREADY_EXIST);
+				error = true;
+				if (DEBUG)
+				{
+					printf("ERROR: table name '%s' already exists in database \n", cmd->table->name);
+				}
+			}
 			current_token = _read_token();
 			if (current_token == COMMA )
 			{
 				current_token = _read_token();
 				if ( _create_arg() )
 				{
-					// if table already exists then you can't create it !
-					if ( table_name_exists_in_TABSYM(cmd->table->name, &table_index))
-					{
-						creer_sm_erreur(yylineno, cmd->table->name, TABLE_ALREADY_EXIST);
-						if (DEBUG)
-						{
-							printf("ERROR: table name '%s' already exists in TABSYM \n", cmd->table->name);
-						}
-					}
-					// if the create command is correct then add this new table to TABSYM/DATABASE
-					else
-					{
+					if ( !error )
+					{					
 						add_table_to_TABSYM(cmd->table);
-					}
-					if ( table_exists_in_database(cmd->table->name) )
-					{
-						creer_sm_erreur(yylineno, cmd->table->name, TABLE_ALREADY_EXIST);
-						if (DEBUG)
-						{
-							printf("ERROR: table name '%s' already exists in database \n", cmd->table->name);
-						}
-					}
-					else
-					{
 						add_table_to_database(cmd->table); 
 					}
 					result = true;
@@ -512,6 +512,7 @@ boolean _create_arg()
 	}
 	return result;
 }
+//_create_arg_aux-->, _create_arg |epsilon
 boolean _create_arg_aux(){
 	boolean result;
 	if(current_token==EOC){
@@ -616,8 +617,7 @@ boolean _list_map()
 }
 
 
-// General rule : map --> key => value map_aux
-
+//  map --> NAME => 'idf' map_aux
 boolean _map()
 {
 	boolean result;
@@ -1099,27 +1099,27 @@ boolean _enable()
 	if(current_token == ENABLE)
 	{
 		current_token = _read_token();
+		cmd = create_command("enable", NULL);
 		if(_table_name())
 		{
 			if (DEBUG)
 			{
 				printf("enabling (%s) ...", cmd->table->name);
 			}
-			if ( table_name_exists_in_TABSYM(cmd->table->name, &table_index) )
-			{
-				if (DEBUG)
-				{
-					printf("(%s) exists in TABSYM at position : %d\n",cmd->table->name, table_index);
-				}
-				enable_table(table_index);		
-			}
-			else
+			char* table_location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char) );
+
+			if ( !table_exists_in_database(cmd->table->name , table_location))
 			{
 				if(DEBUG)
 				{
 					printf("Semantic ERROR : cannot enable table (%s), table doesn't exist\n",cmd->table->name);
 				}
 				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
+			}
+			else
+			{
+				
+				enable_table(table_location,0);	
 			}			
 			result = true;
 		}
@@ -1138,31 +1138,33 @@ boolean _enable()
 boolean _disable()
 {
 	boolean result;
+	
 	if(current_token == DISABLE)
 	{
 		current_token = _read_token();
+		cmd = create_command("disable", NULL);
 		if(_table_name())
 		{
+			printf("disabling (%s) ...", cmd->table->name);
+			char* table_location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char) );
+
 			if (DEBUG)
 			{
 				printf("disabling (%s) ...", cmd->table->name);
 			}
-			if ( table_name_exists_in_TABSYM(cmd->table->name, &table_index) )
-			{
-				if (DEBUG)
-				{
-					printf("(%s) exists in TABSYM at position : %d\n",cmd->table->name, table_index);
-				}
-				disable_table(table_index);	
-			}
-			else
+		    if ( !table_exists_in_database(cmd->table->name , table_location))
 			{
 				if(DEBUG)
 				{
 					printf("Semantic ERROR : cannot enable table (%s), table doesn't exist\n",cmd->table->name);
 				}
 				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
-			}				
+			}	
+			else
+			{
+				printf("table location : '%s'\n", table_location);
+				disable_table(table_location, 0);
+			}			
 			result = true;
 		}
 
@@ -1183,25 +1185,36 @@ boolean _is_enabled()
 	boolean result;
 	if(current_token == IS_ENABLED)
 	{
+		cmd = create_command("is_enabled", NULL);
 		current_token = _read_token();
 		if(_table_name())
 		{
-			if(cmd->table->enabled == true && table_exists_in_database(cmd->table->name))
+			char* table_location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char) );
+
+		    if ( !table_exists_in_database(cmd->table->name , table_location))
 			{
-				printf("YES, the table is enabled\n"); 
-				result = true;                
-			}
-			else if(cmd->table->enabled == false && table_exists_in_database(cmd->table->name))
-			{
-				printf("NO\n");
-				result = true;
-			}
+				if(DEBUG)
+				{
+					printf("Semantic ERROR : cannot enable table (%s), table doesn't exist\n",cmd->table->name);
+				}
+				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
+			}	
 			else
 			{
-				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
-				result = true;
-			}
-			
+				Table* t = get_table_from_database(cmd->table->name);
+				if(t)
+				{
+					if(t->enabled == true)
+					{
+						printf("YES, the table is enabled\n");
+					}
+					else
+					{
+						printf("NO, the table is not enabled\n");
+					}
+				}
+			}			
+			result = true;
 		}
 		else
 		{
@@ -1219,21 +1232,35 @@ boolean _is_disabled()
 	boolean result;
 	if(current_token == IS_DISABLED)
 	{
+		cmd = create_command("is_disabled", NULL);
 		current_token = _read_token();
 		if(_table_name())
 		{
-			if(cmd->table->enabled == false && table_name_exists_in_TABSYM(cmd->table->name, &table_index))
+			char* table_location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char) );
+
+		    if ( !table_exists_in_database(cmd->table->name , table_location))
 			{
-				printf("YES, the table is disabled\n");
-			}
-			else if (cmd->table->enabled == true && table_name_exists_in_TABSYM(cmd->table->name, &table_index))
-			{
-				printf("NO\n");
-			}
+				if(DEBUG)
+				{
+					printf("Semantic ERROR : cannot enable table (%s), table doesn't exist\n",cmd->table->name);
+				}
+				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
+			}	
 			else
 			{
-				creer_sm_erreur(yylineno, cmd->table->name, TABLE_DOESNT_EXIST);
-			}
+				Table* t = get_table_from_database(cmd->table->name);
+				if(t)
+				{
+					if(t->enabled == false)
+					{
+						printf("YES, the table is disabled\n");
+					}
+					else
+					{
+						printf("NO, the table is not disabled\n");
+					}
+				}
+			}			
 			result = true;
 		}
 		else
@@ -1608,10 +1635,10 @@ boolean _map_aux()
 
 int main(int argc, char const *argv[])
 {
-	int nb_tab;
 	current_token = _read_token();
-
-	if ( _prog() )
+	
+	_prog();
+	/*
 	{
 		if (nombre_sm_erreurs() == 0)
 		{
@@ -1622,11 +1649,14 @@ int main(int argc, char const *argv[])
 		{
 			afficher_sm_erreurs();
 		}
-	}
+	}*/
+	//Table* t = get_table_from_database("t1");
+	//disable_table(t->location, 0);
+	/*
 	char tname[20];
 	strcpy(tname, "t1");
 	Table*	t = get_table_from_database(tname);
-	show_table(t);
+	show_table(t);*/
 	//list_tables_by_name_in_database(&nb_tab);
 	return 0;
 }
