@@ -207,6 +207,14 @@ boolean _command()
 				show_TABSYM(cmd);
 			}
 		}
+	}
+	else if(_list())
+	{
+		current_token = _read_token();
+		if(current_token == EOC)
+		{
+			result  = true;
+		}
 	}	
 	/*else if(_help())
 	{
@@ -1085,6 +1093,41 @@ boolean _describe()
 		{
 			result  =false;
 		}
+	}
+	else
+	{
+		result = false;
+	}
+	return result;
+}
+
+boolean _list()
+{
+	boolean result;
+	int i, nb_tables;
+	if(current_token == _LIST)
+	{
+		cmd = create_command("list", NULL);
+		char** tab_name_list = list_tables_by_name_in_database(&nb_tables);
+		if(nb_tables != 0)
+		{
+			for (i=0 ; i < nb_tables; ++i)
+			{
+		 		printf("%s\n",tab_name_list[i]);
+			}
+			printf("%d row(s)\n",nb_tables );
+			printf("==> [ \"%s\"",tab_name_list[0]);
+			for (i=1 ; i < nb_tables; ++i)
+			{
+		 		printf(" , \"%s\"",tab_name_list[i]);
+			}
+			printf(" ]");
+		}
+		else
+		{
+			printf("NOTHING to show\n");
+		}
+		result = true;
 	}
 	else
 	{
