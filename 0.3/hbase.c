@@ -388,35 +388,45 @@ boolean _drop()
 		current_token = _read_token();
 		if(_table_name())
 		{
-			if(table_name_exists_in_TABSYM(cmd->table->name, &table_index))
+			//char* table_location = (char*) malloc( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char));
+			if ( table_exists_in_database(cmd->table->name, NULL))
 			{
-				if( !table_is_enabled(table_index))
+				Table* tab = get_table_from_database(cmd->table->name);
+				//show_table(tab);
+				if(tab->enabled == false ) 
 				{
-					delete_from_TABSYM(table_index);
+					cmd->table->location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char));
+					strcpy(cmd->table->location, DATABASE_DIRECTORY_NAME);
+					strcat(cmd->table->location, cmd->table->name);
+					strcat(cmd->table->location, "/");  // "database/table_name/"
+					if(DEBUG)
+					{
+						printf("deleting directory '%s', location : %s  ...\n", cmd->table->name, cmd->table->location);
+					}
+					delete_table_from_database(cmd->table);
+
+					if(table_name_exists_in_TABSYM(cmd->table->name, &table_index))
+					{
+						if(DEBUG)
+						{
+							printf("Table '%s' exists in TABSYM\n", cmd->table->name);
+							printf("Deleting from TABSYM...\n");
+						}
+						delete_from_TABSYM(table_index);
+					}
 				}
 				else
 				{
-					creer_sm_erreur(yylineno, cmd->table->name, TABLE_IS_ENABLED);
+					creer_sm_erreur(yylineno+1, cmd->table->name, TABLE_IS_ENABLED);
 				}
 			}
 			else
 			{
+				creer_sm_erreur(yylineno+1, cmd->table->name, TABLE_DOESNT_EXIST);
 				if(DEBUG)
 				{
 					printf("ERROR table_name do not exist\n");
 				}
-			}
-			if ( table_exists_in_database(cmd->table->name))
-			{
-				cmd->table->location = (char*) malloc ( (strlen(DATABASE_DIRECTORY_NAME)+strlen(cmd->table->name)+2)*sizeof(char));
-				strcpy(cmd->table->location, DATABASE_DIRECTORY_NAME);
-				strcat(cmd->table->location, cmd->table->name);
-				strcat(cmd->table->location, "/");  // "database/table_name/"
-				if(DEBUG)
-				{
-					printf("deleting directory '%s', location : %s  ...\n", cmd->table->name, cmd->table->location);
-				}
-				delete_table_from_database(cmd->table);
 			}
 			result  = true;
 		}
