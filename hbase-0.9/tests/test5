@@ -1,0 +1,41 @@
+drop 'SPY22'
+drop 'SPY23'
+drop 'SPY24'
+help
+whoami
+version
+create 'SPY22', 'f11', 'f12', 'f13'
+put 'SPY22', 'r1', 'f11:c1', 'v1'
+put 'SPY22', 'r1', 'f11:c2', 'v2', 23
+put 'SPY22', 'r1', 'f12:c3', 'v3'
+scan 'SPY22'
+put 'SPY22', 'r1', 'f11:c1', 'v4'
+scan 'SPY22'
+describe 'SPY22'
+alter 'SPY22', NAME => 'f12', VERSIONS =>3
+alter 'SPY22','delete' => 'f13'
+alter 'SPY22','f13'
+describe 'SPY22'
+create 'SPY23', 'f21', 'f22'
+create 'SPY24', 'f31'
+list
+enable 'SPY24'
+drop 'SPY24'
+is_enabled 'SPY24'
+disable 'SPY24'
+drop 'SPY24'
+exists 'SPY24'
+put 'SPY23', 'r1', 'f21:c1', 'v1'
+scan 'SPY23'
+truncate 'SPY23'
+scan 'SPY23'
+delete 'SPY22', 'r1', 'f11:c2', 23
+scan 'SPY22'
+deleteall 'SPY22', 'r1', 'f11:c1'
+scan 'SPY22'
+put 'SPY22', 'r1', 'f11:c1', 'v1'
+deleteall 'SPY22', 'r1'
+scan 'SPY22'
+put 'SPY22', 'r1', 'f12:c2', 'v2'
+get 'SPY22', 'r1', 'f11:c1'
+exit

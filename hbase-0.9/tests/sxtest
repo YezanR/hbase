@@ -1,0 +1,7 @@
+creat 't', 'f1'
+put 't, 'r', 'fc:c', 'value'
+create 't' 'f2'
+create '1t', 'f3'
+create 't', 'f4
+disable t'
+exit

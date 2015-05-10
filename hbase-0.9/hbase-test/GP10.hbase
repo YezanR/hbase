@@ -1,0 +1,29 @@
+drop 'SPY27'
+drop 'SPY26'
+
+create 'SPY27','famcol1','famcol1' 								
+create 'SPY27','famcol1',{NAME=>'famcol1',TTL=>5} 						
+create 'SPY27','famcol1',{NAME=>'famcol1',VERSIONS=>5,TTL=>5} 					
+create 'SPY27','famcol1',{NAME=>'famcol2',VERSIONS=>5},{NAME=>'famcol3',TTL=>14552} 		
+create 'SPY27','test' 
+
+create 'SPY25',{NAME=>'t',VERSIONS=>5,VERSIONS=>54} 
+put 'SPY27','row1','famcol55555:cc','data' 
+put 'SPY27eeeee','row1','famcol1:colonne1','data' 
+put 'SPY27','row1','famcol1:colonne1','data1' 
+put
+'SPY27','row1','famcol2:colonne2','data2
+put 'SPY27','row1','famcol1:colonne3','data3'
+scan 'SPY27eee'
+scan 'SPY27'
+alter 'SPY27ee',{{NAME=>'famcol1',TTL=>5555} 
+alter 'SPY27',{{NAME=>'famcol1',TTL=>5555}  
+alter 'SPY27',{{NAME=>'famcol5',TTL=>5555}  
+list
+enable
+disable
+is_enabled
+is_disabled
+drop
+help
+exit

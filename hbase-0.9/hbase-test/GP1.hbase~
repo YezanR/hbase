@@ -1,0 +1,30 @@
+drop 'SPY1'
+drop 'SPY2'
+drop 'SPY3'
+drop 'SPY4'
+create 'SPY1', 'fcol1', 'fcol2'
+create 'SPY2', 'fcol1', 'fcol23'
+create 'SPY3', {NAME => 'f1'}, {NAME => 'f2'}
+create 'SPY4', {NAME => 'f1', VERSIONS => 5}
+list
+put 'SPY1', 'r1', 'fcol1:cel', 'valeur1'
+put 'SPY1', 'r1', 'fcol2:cel2', 'valeur2'
+put 'SPY1', 'r2', 'fcol1:cel3', 'valeur3'
+scan 'SPY1'
+put 'SPY1', 'r1', 'fcol1:cel', 'valeur4'
+scan 'SPY1'
+describe 'SPY4'
+scan 'SPY1'
+scan 'SPY1', {VERSIONS => 2}
+drop 'SPY1'
+is_enabled 'SPY1'
+disable 'SPY1'
+is_disabled 'SPY1'
+drop 'SPY1'
+disable 'SPY2'
+put 'SPY2', 'ligne', 'fcol1:c1', 'val'
+list
+
+
+
+

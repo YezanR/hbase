@@ -1,0 +1,47 @@
+scan 'SPY19', {COLUMNS => ['f33:col22'], LIMIT => 1}
+
+delete 'SPY19', 'r2', 'col22'
+
+delete 'SPY18', 'r6', 'col1',254112
+
+count 'SPY19'
+
+count 'SPY20'
+
+enable 'SPY188'
+
+enable 'SPY21'
+
+is_disabled 'SPY21'
+
+is_disabled 'SPY203'
+
+disable 'SPY21'
+
+describe 'SPY21'
+
+is_enabled 'SPY191'
+
+is_enabled 'SPY20'
+
+disable 'SPY2111'
+
+get 'SPY21','r1','col1','col5'
+
+get 'SPY21','r1','col4'
+
+get 'SPY203','idfrow55'
+
+get 'SPY21', 'r1', {COLUMN => 'col1'}
+
+get 'SPY21', 'r1', {COLUMN => 'col1','col22'}
+
+drop 'SPY19'
+
+create 'SPY19','f1','f2','f3'
+
+drop 'SPY18'
+
+create 'SPY18','f1','f3'
+
+exit

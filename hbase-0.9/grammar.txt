@@ -1,0 +1,36 @@
+
+/*
+	===================	 HBASE GRAMMAR  =================================
+
+
+	command 				--> 	pointed_command_name 	arg
+
+	pointed_comand_name 	--> 	IDF.command_name | command_name
+
+	command_name 			-->		CREATE | PUT | ALTER | SCAN | STATUS ... 
+
+	arg						--> 	argaux	argaux_aux	| epsilon
+
+	argaux_aux				-->		, argaux  argaux_aux  |  epsilon
+
+	argaux 					-->		aux	  |  map  |	 {arg}
+
+	aux 					-->     'IDF aux_aux  |  function  |  INUMBER  |  DNUMBER  |  TRUE  |  FALSE  
+
+	aux_aux					-->     :IDF'  |  '
+
+	map 					-->		key  =>  ExpOr
+
+	ExpOr					-->		ExpAnd  ExpOrAux
+
+	ExpOrAux				-->		OR  ExpAnd  ExpOrAux  |  epsilon
+
+	ExpAnd					-->		aux  ExpAndAux
+
+	ExpAndAux				-->		AND  aux  ExpAndAux  |  epsilon
+
+	key						-->		NAME  |  FILTER  |  VERSIONS  |  METHOD ...
+
+	function				-->     // pending ...
+
+*/

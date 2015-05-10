@@ -1,0 +1,8 @@
+drop 'SPY13'
+create 'SPY13','cf'
+describe 'SPY13'
+alter 'SPY13',{NAME=>'tcd'}
+alter 'SPY13' ,{NAME=>'ana',VERSIONS=>'13'}
+describe 'SPY13'
+create 'SPY13','cf'
+exit

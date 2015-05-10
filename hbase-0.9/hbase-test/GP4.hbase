@@ -1,0 +1,20 @@
+create 'SPY10','cf1','cf2','cf3'
+put 'SPY10','r1','cf1:nom','souad',12441
+put 'SPY10','r1','cf2:prenom','benmohou',854788965
+put 'SPY11','r1','cf3:ville','errachidia'
+scan 'SPY10'
+disable 'SPY10'
+drop 'SPY10'
+create 'SPY11','cf1','cf2'
+drop 'SPY11'
+create 'SPY12','cf1','cf2'
+alter 'SPY12',{NAME=>'cf1',IN_MEMORY=>false},{NAME=>'cf1',VERSIONS=>3}
+enable 'SPY12'
+alter 'SPY12',{NAME=>'cf1',IN_MEMORY=>false},{NAME=>'cf1',VERSIONS=>3}
+describe'SPY12'
+alter  'SPY12',{NAME=>'cf1',METHOD=>'delete'}
+describe 'SPY12'
+disable 'SPY12'
+drop 'SPY12'
+quit
+exit

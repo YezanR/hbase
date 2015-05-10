@@ -1,0 +1,46 @@
+help
+
+drop 'user'
+
+create 'user', 'authn', 'geo', 'perso'
+
+exists 'user'
+
+alter 'user',{NAME=>'user',IN_MEMORY=>false},{NAME=>'authn',VERSIONS=>3},{NAME=>'perso',VERSIONS=>3}
+
+describe 'user'
+
+put 'user', 'kbaina', 'authn:mdp', 'toto', 200
+
+put 'user', 'kbaina', 'mdp', 'toto', 201
+
+put 'user', 'kbaina', 'authn:login', 'karim.baina', 202
+
+put 'user', 'kbaina', 'geo:country', 'morocco', 202
+
+put 'user', 'kbaina', 'geo:city', 'rabat', 203
+
+put 'user', 'kbaina', 'perso:age', '38', 204
+
+put 'user', 'kbaina', 'perso:gender', 'male', 205
+
+put 'user', 'kbaina', 'perso:maritalstatus', 'maried', 206
+
+scan 'user'
+
+drop 'user'
+
+disable 'user'
+
+enable 'user'
+
+disable 'user'
+
+list
+
+drop 'user'
+
+list
+
+exit
+

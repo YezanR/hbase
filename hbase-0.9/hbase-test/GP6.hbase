@@ -1,0 +1,16 @@
+drop 'SPY14'
+create 'SPY14','cf1'
+describe 'SPY14'
+enable 'SPY14'
+put 'SPY14','row1','cf1:c1','valeur1',152
+put 'SPY14','row1','cf1:c1','valeur1',1456
+put 'SPY14','row1','cf1:c1','valeur1',1447
+put 'SPY14','row1','cf1:c2','valeur1',12
+put 'SPY14','row2','cf1:c2','valeur2',14789
+scan 'SPY14'
+get 'SPY14','row1'
+get 'SPY14','row2',{COLUMN=>'cf1:c2'}
+deleteall 'SPY14','row1'
+scan 'SPY14'
+disable 'SPY14'
+exit

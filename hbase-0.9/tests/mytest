@@ -1,0 +1,9 @@
+create 't1', 'fc1', 'fc2'
+create 't2', 'fc1', 'fc2'
+is_enabled 't1'
+is_disabled 't2'
+drop 't1'
+disable 't2'
+drop 't2'
+is_disabled 't1'
+exit

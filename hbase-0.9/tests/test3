@@ -1,0 +1,22 @@
+drop 'SPY8'
+drop 'SPY9'
+drop 'SPY82'
+create 'SPY8','f1','f2','f3'
+create 'SPY8','f5','F6','f7'
+create 'SPY9','f1','f1','f4'
+create 'SPY82' ,{NAME=> f1},{NAME=>f2,VERSION=>2}
+put 'SPY8','r1','f1:column','valeur'
+put 'pasdetable','t5','f9:column2','value'
+put 'SPY8','f1','f11:column','value'
+create_namespace 'new'
+liste_namespace 
+list_namespace_table 'SPY8'
+drop_namespace 'new'
+enable 'SPY8'
+enable 'pas'
+is_enabled 'SPY8'
+disable 'SPY8'
+is_enabled 'SPY8'
+is_disabled 'pas'
+is_disabled 'SPY8'
+exit

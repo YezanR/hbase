@@ -1,0 +1,5 @@
+puts 't', 'r', 'fc:c', 'value'
+create t99', 'f
+create 't1', 'f1', 'f2'
+describe 't100'
+exit

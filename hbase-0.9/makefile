@@ -1,0 +1,29 @@
+CC=gcc
+
+CFLAGS=-Wall
+
+objects=hbase.o lex.yy.o tabsym.o error.o database.o liste.o 
+
+hbase: 	$(objects)
+	@$(CC) $(objects) -o hbase  $(CFLAGS)
+	@echo done!
+
+hbase.o : hbase.c 
+	@$(CC) hbase.c -o hbase.o -c $(CFLAGS)
+
+tabsym.o : 		tabsym.c
+	@$(CC) tabsym.c -o tabsym.o -c $(CFLAGS) 
+
+error.o : 		error.c
+	@$(CC) error.c -o error.o -c $(CFLAGS) 
+
+database.o :	database.c
+	@$(CC) database.c -o database.o -c $(CFLAGS) 
+
+lex.yy.o : 	lex.yy.c
+	@$(CC) lex.yy.c -o lex.yy.o -c -lfl $(CFLAGS) 
+ 
+
+clean:
+	@rm *.o hbase
+

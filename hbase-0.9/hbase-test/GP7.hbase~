@@ -1,0 +1,14 @@
+drop 'SPY15'
+list
+exists 'SPY16'
+create 'SPY16','cours'
+create 'SPY15','prof','cours'
+list
+is_disabled 'SPY16'
+disable 'SPY16'
+is_enabled 'SPY16'
+enable 'SPY16'
+drop 'SPY16'
+put 'SPY17','star','z:sana','nvleval'
+get 'SPY17','star'
+exit

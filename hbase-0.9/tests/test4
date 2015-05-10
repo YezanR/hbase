@@ -1,0 +1,5 @@
+create 't1', 'f1'
+create 't2', 'f1'
+create 't1', 'f2'
+create 't2', 'f2'
+exit

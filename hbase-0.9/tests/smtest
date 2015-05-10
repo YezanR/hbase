@@ -1,0 +1,4 @@
+create 't1', 'f1', 'f2'
+enable 't99'
+drop 't'
+exit
